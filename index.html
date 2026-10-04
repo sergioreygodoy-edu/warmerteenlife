@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Warm Up Teen Life</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Kalam:wght@400;700&display=swap');
+
+:root{
+  --bg1:#2b2b3d;
+  --bg2:#1c1c28;
+  --paper:#f7f4ec;
+  --ink:#2b2b2b;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'Patrick Hand', cursive;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 6px),
+    linear-gradient(var(--bg1), var(--bg2));
+  min-height:100vh;
+  padding:28px 16px 60px;
+  color:var(--ink);
+}
+
+.sheet{
+  max-width:980px;
+  margin:0 auto;
+  background:var(--paper);
+  border-radius:6px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+  padding:34px 30px 30px;
+  position:relative;
+}
+
+/* ---------- Title, cutout letters ---------- */
+.title-row{
+  text-align:center;
+  margin-bottom:6px;
+}
+.title-row .word{
+  display:inline-block;
+  font-family:'Fredoka', sans-serif;
+  font-weight:700;
+  font-size:56px;
+  padding:4px 10px;
+  margin:0 3px 6px;
+  border-radius:8px;
+  box-shadow:0 4px 0 rgba(0,0,0,0.15);
+  transform:rotate(var(--r,0deg));
+}
+.t1{background:#e0533d;color:#fff;--r:-3deg;}
+.t2{background:#3aa6a0;color:#fff;--r:2deg;}
+.title2{
+  text-align:center;
+  font-family:'Fredoka', sans-serif;
+  font-weight:600;
+  font-size:32px;
+  color:#3a3a5a;
+  letter-spacing:2px;
+  margin:0 0 18px;
+}
+
+.subtitle{
+  text-align:center;
+  font-family:'Kalam', cursive;
+  font-size:15px;
+  color:#555;
+  max-width:640px;
+  margin:0 auto 26px;
+  line-height:1.5;
+}
+
+/* ---------- Tabs ---------- */
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:26px;
+}
+.tab-btn{
+  font-family:'Fredoka', sans-serif;
+  font-weight:600;
+  font-size:15px;
+  border:none;
+  cursor:pointer;
+  padding:10px 20px;
+  border-radius:20px;
+  color:#fff;
+  opacity:0.55;
+  transform:translateY(0);
+  transition:opacity .15s, transform .15s;
+  box-shadow:0 3px 0 rgba(0,0,0,0.2);
+}
+.tab-btn:hover{opacity:0.85;}
+.tab-btn.active{opacity:1;transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,0.25);}
+
+/* ---------- Page panel ---------- */
+.page{display:none;}
+.page.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+.page-header{
+  border-radius:10px;
+  padding:16px 20px;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.page-header h2{
+  font-family:'Fredoka', sans-serif;
+  font-weight:700;
+  font-size:28px;
+  margin:0;
+  color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,0.15);
+}
+.page-header .prompt{
+  font-family:'Kalam', cursive;
+  font-weight:700;
+  font-size:16px;
+  color:#fff;
+  background:rgba(0,0,0,0.2);
+  padding:6px 14px;
+  border-radius:20px;
+}
+
+/* ---------- Card grid ---------- */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
+}
+@media (max-width:720px){
+  .grid{grid-template-columns:repeat(2, 1fr);}
+  .title-row .word{font-size:38px;}
+  .title2{font-size:22px;}
+}
+
+.card{
+  border-radius:10px;
+  padding:14px 10px 12px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+  transition:transform .15s, box-shadow .15s;
+  box-shadow:0 4px 0 rgba(0,0,0,0.15);
+  border:3px solid transparent;
+}
+.card:hover{transform:translateY(-3px);}
+.card.picked{
+  border-color:#ffdd57;
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 6px 0 rgba(0,0,0,0.2), 0 0 0 4px rgba(255,221,87,0.4);
+}
+.card .icon{
+  font-size:38px;
+  display:block;
+  margin-bottom:8px;
+  filter:drop-shadow(0 2px 1px rgba(0,0,0,0.15));
+}
+.card p{
+  font-family:'Kalam', cursive;
+  font-size:14px;
+  line-height:1.35;
+  margin:0;
+  color:#2b2b2b;
+}
+.card .check{
+  position:absolute;
+  top:6px;
+  right:8px;
+  font-size:16px;
+  opacity:0;
+}
+.card.picked .check{opacity:1;}
+
+.counter{
+  text-align:center;
+  font-family:'Kalam', cursive;
+  font-size:14px;
+  color:#666;
+  margin-top:12px;
+}
+.reset-btn{
+  display:block;
+  margin:10px auto 0;
+  font-family:'Patrick Hand', cursive;
+  font-size:13px;
+  background:none;
+  border:1px dashed #999;
+  border-radius:14px;
+  padding:4px 12px;
+  cursor:pointer;
+  color:#777;
+}
+.reset-btn:hover{background:#eee;}
+
+footer{
+  text-align:center;
+  font-family:'Kalam', cursive;
+  font-size:12px;
+  color:rgba(255,255,255,0.55);
+  margin-top:22px;
+}
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <div class="title-row">
+    <span class="word t1">Warm</span><span class="word t2">Up</span>
+  </div>
+  <div class="title2">TEEN LIFE</div>
+  <p class="subtitle">Project a page, pick a card, defend your choice. These ones are built to spark real arguments &mdash; privacy vs. convenience, honesty vs. comfort, control vs. chaos. Great for 15&ndash;18 year olds.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-page="phones" style="background:#3aa6a0;">📱 Phones</button>
+    <button class="tab-btn" data-page="backpacks" style="background:#d99a3a;">🎒 Backpacks</button>
+    <button class="tab-btn" data-page="headphones" style="background:#7a52a8;">🎧 Headphones</button>
+    <button class="tab-btn" data-page="bedrooms" style="background:#c9527a;">🛏️ Bedrooms</button>
+    <button class="tab-btn" data-page="cars" style="background:#c9432f;">🚗 Cars</button>
+  </div>
+
+  <!-- PHONES -->
+  <section class="page active" id="phones">
+    <div class="page-header" style="background:#3aa6a0;">
+      <h2>Warm Up Phones</h2>
+      <div class="prompt">You can only keep 2 features. Which do you choose?</div>
+    </div>
+    <div class="grid" data-limit="2">
+      <div class="card" style="background:#bfe6e3;"><span class="check">✔️</span><span class="icon">⚡</span><p>It charges fully in 10 seconds</p></div>
+      <div class="card" style="background:#d9f2f0;"><span class="check">✔️</span><span class="icon">🔕</span><p>It blocks every notification during class, automatically</p></div>
+      <div class="card" style="background:#bfe6e3;"><span class="check">✔️</span><span class="icon">♾️</span><p>It never runs out of storage</p></div>
+      <div class="card" style="background:#d9f2f0;"><span class="check">✔️</span><span class="icon">🗣️</span><p>It translates any language in real time, out loud</p></div>
+      <div class="card" style="background:#d9f2f0;"><span class="check">✔️</span><span class="icon">🫣</span><p>It deletes your most embarrassing photo the moment you shake it</p></div>
+      <div class="card" style="background:#bfe6e3;"><span class="check">✔️</span><span class="icon">👂</span><p>It warns you the moment someone is talking behind your back</p></div>
+      <div class="card" style="background:#bfe6e3;"><span class="check">✔️</span><span class="icon">⏱️</span><p>It lets you unsend a message up to one hour after sending it</p></div>
+      <div class="card" style="background:#d9f2f0;"><span class="check">✔️</span><span class="icon">🎵</span><p>It plays the perfect song for your mood, without you choosing</p></div>
+    </div>
+    <div class="counter">Picked: <span class="count">0</span>/2</div>
+    <button class="reset-btn" data-reset>clear my picks</button>
+  </section>
+
+  <!-- BACKPACKS -->
+  <section class="page" id="backpacks">
+    <div class="page-header" style="background:#d99a3a;">
+      <h2>Warm Up Backpacks</h2>
+      <div class="prompt">You can only own 1. Which do you choose?</div>
+    </div>
+    <div class="grid" data-limit="1">
+      <div class="card" style="background:#f2dcae;"><span class="check">✔️</span><span class="icon">🪶</span><p>It's never too heavy, no matter what you pack inside</p></div>
+      <div class="card" style="background:#f8ecd1;"><span class="check">✔️</span><span class="icon">🎯</span><p>It always has exactly what you need for the day</p></div>
+      <div class="card" style="background:#f2dcae;"><span class="check">✔️</span><span class="icon">🗄️</span><p>It fits an entire desk hidden inside it</p></div>
+      <div class="card" style="background:#f8ecd1;"><span class="check">✔️</span><span class="icon">🎨</span><p>It changes colour to match your outfit every morning</p></div>
+      <div class="card" style="background:#f8ecd1;"><span class="check">✔️</span><span class="icon">📍</span><p>It never gets lost, it always finds its way back to you</p></div>
+      <div class="card" style="background:#f2dcae;"><span class="check">✔️</span><span class="icon">🌡️</span><p>It keeps your lunch at the perfect temperature all day</p></div>
+      <div class="card" style="background:#f2dcae;"><span class="check">✔️</span><span class="icon">📝</span><p>It finishes your homework overnight, but only gets it right half the time</p></div>
+      <div class="card" style="background:#f8ecd1;"><span class="check">✔️</span><span class="icon">🫥</span><p>It makes you invisible to one teacher, once a week</p></div>
+    </div>
+    <div class="counter">Picked: <span class="count">0</span>/1</div>
+    <button class="reset-btn" data-reset>clear my picks</button>
+  </section>
+
+  <!-- HEADPHONES -->
+  <section class="page" id="headphones">
+    <div class="page-header" style="background:#7a52a8;">
+      <h2>Warm Up Headphones</h2>
+      <div class="prompt">You can only own 1 pair. Which do you choose?</div>
+    </div>
+    <div class="grid" data-limit="1">
+      <div class="card" style="background:#ddcdef;"><span class="check">✔️</span><span class="icon">🔇</span><p>They cancel out any one sound you don't want to hear, forever</p></div>
+      <div class="card" style="background:#eee2f7;"><span class="check">✔️</span><span class="icon">🌍</span><p>They let you understand any language as if it were your own</p></div>
+      <div class="card" style="background:#ddcdef;"><span class="check">✔️</span><span class="icon">💬</span><p>They give you the confidence to say what you're really thinking, once a day</p></div>
+      <div class="card" style="background:#eee2f7;"><span class="check">✔️</span><span class="icon">📼</span><p>They let you replay any memory as if you were living it again</p></div>
+      <div class="card" style="background:#eee2f7;"><span class="check">✔️</span><span class="icon">🧠</span><p>They whisper your friends' true feelings to you</p></div>
+      <div class="card" style="background:#ddcdef;"><span class="check">✔️</span><span class="icon">⏭️</span><p>They let you skip a boring conversation like a song</p></div>
+      <div class="card" style="background:#ddcdef;"><span class="check">✔️</span><span class="icon">🎬</span><p>They play music that perfectly scores the moment you're living</p></div>
+      <div class="card" style="background:#eee2f7;"><span class="check">✔️</span><span class="icon">📡</span><p>They let you talk telepathically with one person, anywhere in the world</p></div>
+    </div>
+    <div class="counter">Picked: <span class="count">0</span>/1</div>
+    <button class="reset-btn" data-reset>clear my picks</button>
+  </section>
+
+  <!-- BEDROOMS -->
+  <section class="page" id="bedrooms">
+    <div class="page-header" style="background:#c9527a;">
+      <h2>Warm Up Bedrooms</h2>
+      <div class="prompt">You can only pick 2 upgrades. Which do you choose?</div>
+    </div>
+    <div class="grid" data-limit="2">
+      <div class="card" style="background:#f2c3d6;"><span class="check">✔️</span><span class="icon">🖼️</span><p>Your walls show any view you want, live</p></div>
+      <div class="card" style="background:#f9dde8;"><span class="check">✔️</span><span class="icon">🛌</span><p>Your bed makes itself and never needs new sheets</p></div>
+      <div class="card" style="background:#f2c3d6;"><span class="check">✔️</span><span class="icon">🌡️</span><p>Your room is always the perfect temperature</p></div>
+      <div class="card" style="background:#f9dde8;"><span class="check">✔️</span><span class="icon">👕</span><p>Your closet dresses you in the perfect outfit, instantly</p></div>
+      <div class="card" style="background:#f9dde8;"><span class="check">✔️</span><span class="icon">🚪</span><p>Your door only opens for people you actually want to see</p></div>
+      <div class="card" style="background:#f2c3d6;"><span class="check">✔️</span><span class="icon">🔇</span><p>Your room soundproofs itself the moment you need to focus or scream</p></div>
+      <div class="card" style="background:#f2c3d6;"><span class="check">✔️</span><span class="icon">🪞</span><p>Your mirror tells you one honest truth every morning</p></div>
+      <div class="card" style="background:#f9dde8;"><span class="check">✔️</span><span class="icon">🔀</span><p>Your room rearranges itself to match your mood</p></div>
+    </div>
+    <div class="counter">Picked: <span class="count">0</span>/2</div>
+    <button class="reset-btn" data-reset>clear my picks</button>
+  </section>
+
+  <!-- CARS -->
+  <section class="page" id="cars">
+    <div class="page-header" style="background:#c9432f;">
+      <h2>Warm Up Cars</h2>
+      <div class="prompt">You can only keep 1 feature forever. Which do you choose?</div>
+    </div>
+    <div class="grid" data-limit="1">
+      <div class="card" style="background:#f2c1b4;"><span class="check">✔️</span><span class="icon">⛽</span><p>It never runs out of fuel or battery</p></div>
+      <div class="card" style="background:#f9ddd3;"><span class="check">✔️</span><span class="icon">🅿️</span><p>It parks itself perfectly, every single time</p></div>
+      <div class="card" style="background:#f2c1b4;"><span class="check">✔️</span><span class="icon">🏠</span><p>It drives itself home safely if you're too tired to drive</p></div>
+      <div class="card" style="background:#f9ddd3;"><span class="check">✔️</span><span class="icon">✨</span><p>It never gets a scratch or a dent</p></div>
+      <div class="card" style="background:#f9ddd3;"><span class="check">✔️</span><span class="icon">🛣️</span><p>It always knows the fastest route, avoiding all traffic</p></div>
+      <div class="card" style="background:#f2c1b4;"><span class="check">✔️</span><span class="icon">🚦</span><p>It lets you skip every red light for one day a week</p></div>
+      <div class="card" style="background:#f2c1b4;"><span class="check">✔️</span><span class="icon">🔄</span><p>It turns into whatever car matches your mood that day</p></div>
+      <div class="card" style="background:#f9ddd3;"><span class="check">✔️</span><span class="icon">👥</span><p>It fits twice as many friends inside as it should</p></div>
+    </div>
+    <div class="counter">Picked: <span class="count">0</span>/1</div>
+    <button class="reset-btn" data-reset>clear my picks</button>
+  </section>
+
+  <footer>Warm Up Teen Life &mdash; 5 pages &middot; 40 objects &middot; project it, choose, argue about it.</footer>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const pages = document.querySelectorAll('.page');
+
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      pages.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.page).classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.grid').forEach(grid=>{
+    const limit = parseInt(grid.dataset.limit, 10);
+    const countEl = grid.parentElement.querySelector('.count');
+    grid.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        const picked = grid.querySelectorAll('.card.picked').length;
+        if(card.classList.contains('picked')){
+          card.classList.remove('picked');
+        } else if(picked < limit){
+          card.classList.add('picked');
+        }
+        countEl.textContent = grid.querySelectorAll('.card.picked').length;
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-reset]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const grid = btn.previousElementSibling.previousElementSibling;
+      grid.querySelectorAll('.card.picked').forEach(c=>c.classList.remove('picked'));
+      grid.parentElement.querySelector('.count').textContent = 0;
+    });
+  });
+</script>
+
+</body>
+</html>
